@@ -1,5 +1,6 @@
 ﻿using System;
 using static ZeroOS.BootLoader.EFI.UEFIBaseType;
+using ZeroOS.BootLoader.EFI.Enums;
 
 namespace ZeroOS.BootLoader.EFI
 {
@@ -10,6 +11,13 @@ namespace ZeroOS.BootLoader.EFI
 
         public static void* CLIInProtocol;
         public static EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL* CLIOutProtocol;
+
+        public static EFI_COLORS CurrentFontColor;
+
+        static CLI()
+        {
+            CurrentFontColor = EFI_COLORS.EFI_WHITE;
+        }
 
         public static void Initialize(EFI_SYSTEM_TABLE* systemTable)
         {
@@ -38,7 +46,7 @@ namespace ZeroOS.BootLoader.EFI
             fixed(char* pStr = strToTest)
                 retVal = (ulong)CLIOutProtocol->TestString(CLIOutProtocol, pStr);
 
-            return retVal == ReturnTypes.RETURN_SUCCESS;
+            return retVal == (ulong)EFI_STATUS.RETURN_SUCCESS;
         }
 
         public static void Write(string strToWrite)
@@ -58,6 +66,31 @@ namespace ZeroOS.BootLoader.EFI
 
             fixed (char* pStr = strToWrite)
                 CLIOutProtocol->OutputString(CLIOutProtocol, pStr);
+        }
+
+        public static void Write(string strToWrite, EFI_COLORS color)
+        {
+            if (CLIOutProtocol == null)
+                CLIOutProtocol = Program.Global_EFI_SYSTEM_TABLE->ConOut;
+
+            EFI_COLORS originalColor = CurrentFontColor;
+            SetForeColor(color);
+
+            if (strToWrite == null || strToWrite.Length == 0)
+            {
+                string strNullOrLengthZeroErrorMessage = "Failed to write string as it was null or length was zero.";
+
+                fixed (char* pStr = strNullOrLengthZeroErrorMessage)
+                    CLIOutProtocol->OutputString(CLIOutProtocol, pStr);
+
+                SetForeColor(originalColor);
+                return;
+            }
+
+            fixed (char* pStr = strToWrite)
+                CLIOutProtocol->OutputString(CLIOutProtocol, pStr);
+
+            SetForeColor(originalColor);
         }
 
         public static void WriteLine(string strToWrite)
@@ -82,12 +115,42 @@ namespace ZeroOS.BootLoader.EFI
                 CLIOutProtocol->OutputString(CLIOutProtocol, pStr);
         }
 
-        public static void SetForeColor(UEFIBaseType.EFI_COLORS color)
+        public static void WriteLine(string strToWrite, EFI_COLORS color)
+        {
+            if (CLIOutProtocol == null)
+                CLIOutProtocol = Program.Global_EFI_SYSTEM_TABLE->ConOut;
+
+            EFI_COLORS originalColor = CurrentFontColor;
+            SetForeColor(color);
+
+            if (strToWrite == null || strToWrite.Length == 0)
+            {
+                string strNullOrLengthZeroErrorMessage = "Failed to write string as it was null or length was zero.";
+
+                fixed (char* pStr = strNullOrLengthZeroErrorMessage)
+                    CLIOutProtocol->OutputString(CLIOutProtocol, pStr);
+
+                SetForeColor(originalColor);
+                return;
+            }
+
+            fixed (char* pStr = strToWrite)
+                CLIOutProtocol->OutputString(CLIOutProtocol, pStr);
+
+            fixed (char* pStr = "\r\n")
+                CLIOutProtocol->OutputString(CLIOutProtocol, pStr);
+
+            SetForeColor(originalColor);
+        }
+
+        public static void SetForeColor(EFI_COLORS color)
         {
             if (CLIOutProtocol == null)
                 CLIOutProtocol = Program.Global_EFI_SYSTEM_TABLE->ConOut;
 
             CLIOutProtocol->SetAttribute(CLIOutProtocol, (UInt64)color);
+
+            CurrentFontColor = color;
         }
 
         public static void Clear()

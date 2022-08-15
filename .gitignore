@@ -140,3 +140,7 @@ ZeroOS.map
 diskpart.txt
 ZeroOS.vhdx
 *.EFI
+/ZeroOS.BootLoader.ilexe
+/ZeroOS.BootLoader.map
+/ZeroOS.BootLoader.vdi
+/ZeroOS.BootLoader.vhdx

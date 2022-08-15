@@ -5,20 +5,20 @@
 @set VS2022_DIRECTORY="C:\Program Files\Microsoft Visual Studio\2022\Community\"
 @set ORIG_DRIVE=%CD:~0,2%
 @set ORIG_DIRECTORY=%CD%
-@set VHD="%CD%\ZeroOS.vhdx"
-@set VDI="%CD%\ZeroOS.vdi"
+@set VHD="%CD%\ZeroOS.BootLoader.vhdx"
+@set VDI="%CD%\ZeroOS.BootLoader.vdi"
 @set VHD_SCRIPT="%CD%\diskpart.txt"
 @set HYPER-V_DIRECTORY="C:\ZeroOSTestVM"
 
 :: Delete existing files that are needed to be overwritten
 @del %VHD% >nul 2>&1
 @del %VHD_SCRIPT% >nul 2>&1
-@del ZeroOS.ilexe >nul 2>&1
-@del ZeroOS.obj >nul 2>&1
-@del ZeroOS.map >nul 2>&1
-@del ZeroOS.pdb >nul 2>&1
+@del ZeroOS.BootLoader.ilexe >nul 2>&1
+@del ZeroOS.BootLoader.obj >nul 2>&1
+@del ZeroOS.BootLoader.map >nul 2>&1
+@del ZeroOS.BootLoader.pdb >nul 2>&1
 @del BOOTX64.EFI >nul 2>&1
-@del ZeroOS.vhdx >nul 2>&1
+@del ZeroOS.BootLoader.vhdx >nul 2>&1
 
 :: Clean up exiting files instead of building
 @if "%1" == "clean" (
@@ -64,9 +64,9 @@ if exist %HYPER-V_DIRECTORY% (
 )
 
 :: Run CSharp Compiler
-csc /nologo /debug:embedded /noconfig /nostdlib /runtimemetadataversion:v4.0.30319 ZeroOS/Program.cs ZeroOS/BootLoader/EFI/CLI.cs ZeroOS/BootLoader/EFI/UEFIBaseType.cs ZeroOS/CLR/ILC_COMPLIANTS/Internal.Runtime.CompilerHelpers.cs ZeroOS/CLR/ILC_COMPLIANTS/System.cs ZeroOS/CLR/System.cs ZeroOS/CLR/System.Runtime.InteropServices.cs /out:ZeroOS.ilexe /langversion:latest /unsafe
-%ILCPATH%\ilc ZeroOS.ilexe -o ZeroOS.obj --systemmodule ZeroOS --map ZeroOS.map -O
-link /nologo /subsystem:EFI_APPLICATION ZeroOS.obj /entry:EfiMain /incremental:no /out:BOOTX64.EFI
+csc /nologo /debug:embedded /noconfig /nostdlib /runtimemetadataversion:v4.0.30319 ZeroOS.BootLoader/Program.cs ZeroOS.BootLoader/EFI/CLI.cs ZeroOS.BootLoader/EFI/UEFIBaseType.cs ZeroOS.BootLoader/EFI/UEFISpec.cs ZeroOS.BootLoader/EFI/Enums/EFI_COLORS.cs ZeroOS.BootLoader/EFI/Enums/EFI_STATUS.cs ZeroOS.BootLoader/CLR/ILC_COMPLIANTS/Internal.Runtime.CompilerHelpers.cs ZeroOS.BootLoader/CLR/ILC_COMPLIANTS/Internal.TypeSystem.cs ZeroOS.BootLoader/CLR/ILC_COMPLIANTS/System.cs ZeroOS.BootLoader/CLR/System.cs ZeroOS.BootLoader/CLR/System.Runtime.InteropServices.cs /out:ZeroOS.BootLoader.ilexe /langversion:latest /unsafe
+%ILCPATH%\ilc ZeroOS.BootLoader.ilexe -o ZeroOS.BootLoader.obj --systemmodule ZeroOS.BootLoader --map ZeroOS.BootLoader.map -O
+link /nologo /subsystem:EFI_APPLICATION ZeroOS.BootLoader.obj /entry:EfiMain /incremental:no /out:BOOTX64.EFI
 
 :: Create and attach virtual disk
 @(

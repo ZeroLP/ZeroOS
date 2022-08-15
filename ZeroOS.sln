@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroOS", "ZeroOS\ZeroOS.csproj", "{4FDA960F-24D5-4EA9-8108-E61008C45738}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZeroOS.BootLoader", "ZeroOS.BootLoader\ZeroOS.BootLoader.csproj", "{4FDA960F-24D5-4EA9-8108-E61008C45738}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZeroOS.Kernel", "ZeroOS.Kernel\ZeroOS.Kernel.csproj", "{D3F24536-0EFA-4622-8D1F-9972184ECB6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4FDA960F-24D5-4EA9-8108-E61008C45738}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FDA960F-24D5-4EA9-8108-E61008C45738}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FDA960F-24D5-4EA9-8108-E61008C45738}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3F24536-0EFA-4622-8D1F-9972184ECB6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3F24536-0EFA-4622-8D1F-9972184ECB6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3F24536-0EFA-4622-8D1F-9972184ECB6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3F24536-0EFA-4622-8D1F-9972184ECB6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
